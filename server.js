@@ -49,10 +49,27 @@ app.get('/codes', (req, res) =>
         {
         	//Build JSON object:
         	let response = {};
-        	for (let i=0; i<rows.length; i++)
+
+        	//Handler for code:
+        	if (req.query.code)
         	{
-        		response['C' + rows[i].code] = rows[i].incident_type;
-        	}	//for
+        		var codes = req.query.code.split(",");
+        		for (let i=0; i<rows.length; i++)
+	        	{
+	        		if (codes.includes(rows[i].code.toString(10)))
+	        		{
+	        			response['C' + rows[i].code] = rows[i].incident_type;
+	        		}	//if
+	        	}	//for
+        	}	//if
+        	else
+        	{
+				for (let i=0; i<rows.length; i++)
+	        	{
+	        		response['C' + rows[i].code] = rows[i].incident_type;
+	        	}	//for
+        	}	//else
+        	
         	//Handler for format option:
 			if (req.query.format === 'json')
 			{
