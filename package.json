@@ -1,0 +1,26 @@
+{
+    "name": "RESTful-webserver",
+    "version": "0.0.0",
+    "description": "RESTful Web Server using Node JS",
+    "author": {
+        "name": "Tucker Urbanski",
+        "email": "urba4226@stthomas.edu"
+    },
+    "contributors": [
+        {
+            "name": "Jacob Rabaey",
+            "email": "jrrabaey@stthomas.edu"
+        }
+    ],
+    "main": "server.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/urba4226/cisc375_assignment3.git"
+    },
+    "dependencies": {
+        "express": "^4.17.1",
+        "sqlite3": "^4.1.0",
+        "body-parser": "^1.19.0",
+        "js2xmlparser": "^4.0.0"
+    }
+}
