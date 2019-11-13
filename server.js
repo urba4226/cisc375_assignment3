@@ -37,12 +37,6 @@ app.get('/codes', (req, res) =>
             let msg = "Error: could not retrieve data from database";
             Write404Error(res, msg);
         }   //if
-        else if (rows.length < 1)
-        {
-            let msg = "Error: no data for code(s) ";
-            msg = msg + req.params.code;
-            Write404Error(res, msg);
-        }   //else if
         else
         {
         	//Build JSON object:
@@ -97,12 +91,6 @@ app.get('/neighborhoods', (req, res) =>
             let msg = "Error: could not retrieve data from database";
             Write404Error(res, msg);
         }   //if
-        else if (rows.length < 1)
-        {
-            let msg = "Error: no data for neighborhoods(s) ";
-            msg = msg + req.params.code;
-            Write404Error(res, msg);
-        }   //else if
         else
         {
         	//Build JSON object:
@@ -146,29 +134,79 @@ app.get('/neighborhoods', (req, res) =>
     });	//db.all
 });	//app.get
 
-/*
 //GET request handler for incidents
 app.get('/incidents', (req, res) => 
 {
-	let response = {users: []};
-
-	//Handler for format option:
-	if (req.query.format === 'json')
-	{
-		res.type('json').send(response);
-	}	//if
-	else if (req.query.format === 'xml')
-	{
-		let xml = jstoxml.toXML(response);
-		res.type('xml').send(xml);
-	}	//else
-	else
-	{
-		res.type('json').send(response);
-	}	//else
-
+	let query = "SELECT * FROM Incidents ORDER BY date_time desc";
+    db.all(query, (err, rows) =>
+    {
+        if (err)
+        {
+            let msg = "Error: could not retrieve data from database";
+            Write404Error(res, msg);
+        }   //if
+        else
+        {
+        	//Build JSON object:
+        	let response = {};
+			for (let i=0; i<10; i++)
+        	{
+        		let test = true;
+        		let datetime = rows[i].date_time.split("T");
+        		let date = datetime[0];
+        		let time = datetime[1];
+        		let temp = {};
+        		temp['I' + rows[i].case_number] = 	{
+    													'date': date,
+    													'time': time,
+    													'code': rows[i].code,
+    													'incident': rows[i].incident,
+    													'police_grid': rows[i].police_grid,
+    													'neighborhood_number': rows[i].neighborhood_number,
+    													'block': rows[i].block
+        											};
+        		if (req.query.id)
+        		{
+        			console.log("ID true");
+					let ids = req.query.id.split(",");
+    				if(!(ids.includes(temp['I' + rows[i].case_number].neighborhood_number.toString(10))))
+    				{
+    					test = false;
+    				}	//if
+        		}	//if
+        		if (test)
+        		{
+        			response['I' + rows[i].case_number] = 	{
+		    													'date': date,
+		    													'time': time,
+		    													'code': rows[i].code,
+		    													'incident': rows[i].incident,
+		    													'police_grid': rows[i].police_grid,
+		    													'neighborhood_number': rows[i].neighborhood_number,
+		    													'block': rows[i].block
+	        												};
+        		}	//if
+        	}	//for
+        	
+        	//Handler for format option:
+			if (req.query.format === 'json')
+			{
+				res.type('json').send(response);
+			}	//if
+			else if (req.query.format === 'xml')
+			{
+				let xml = js2xmlparser.parse("incidents", response);
+				res.type('xml').send(xml);
+			}	//else if
+			else
+			{
+				res.type('json').send(response);
+			}	//else
+        }	//else
+    });	//db.all
 });	//app.get
 
+/*
 //PUT request handler for new-incident
 app.put('/new-incident', (req, res) =>
 {
