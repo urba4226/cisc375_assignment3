@@ -8,8 +8,6 @@ var bodyParser = require('body-parser');
 var js2xmlparser = require('js2xmlparser');
 var sqlite3 = require('sqlite3');
 
-var public_dir = path.join(__dirname, 'public');
-var template_dir = path.join(__dirname, 'templates');
 var db_filename = path.join(__dirname, 'db', 'stpaul_crime.sqlite3');
 
 var app = express();
@@ -79,7 +77,7 @@ app.get('/codes', (req, res) =>
 			{
 				let xml = js2xmlparser.parse("codes", response);
 				res.type('xml').send(xml);
-			}	//else
+			}	//else if
 			else
 			{
 				res.type('json').send(response);
@@ -87,30 +85,68 @@ app.get('/codes', (req, res) =>
         }	//else
     });	//db.all
 });	//app.get
-/*
 
 //GET request handler for neighborhoods
 app.get('/neighborhoods', (req, res) => 
 {
-	let response = {users: []};
+	let query = "SELECT * FROM Neighborhoods ORDER BY neighborhood_number";
+    db.all(query, (err, rows) =>
+    {
+        if (err)
+        {
+            let msg = "Error: could not retrieve data from database";
+            Write404Error(res, msg);
+        }   //if
+        else if (rows.length < 1)
+        {
+            let msg = "Error: no data for neighborhoods(s) ";
+            msg = msg + req.params.code;
+            Write404Error(res, msg);
+        }   //else if
+        else
+        {
+        	//Build JSON object:
+        	let response = {};
 
-	//Handler for format option:
-	if (req.query.format === 'json')
-	{
-		res.type('json').send(response);
-	}	//if
-	else if (req.query.format === 'xml')
-	{
-		let xml = jstoxml.toXML(response);
-		res.type('xml').send(xml);
-	}	//else
-	else
-	{
-		res.type('json').send(response);
-	}	//else
-
+        	//Handler for code:
+        	if (req.query.id)
+        	{
+        		var ids = req.query.id.split(",");
+        		for (let i=0; i<rows.length; i++)
+	        	{
+	        		if (ids.includes(rows[i].neighborhood_number.toString(10)))
+	        		{
+	        			response['N' + rows[i].neighborhood_number] = rows[i].neighborhood_name;
+	        		}	//if
+	        	}	//for
+        	}	//if
+        	else
+        	{
+				for (let i=0; i<rows.length; i++)
+	        	{
+	        		response['N' + rows[i].neighborhood_number] = rows[i].neighborhood_name;
+	        	}	//for
+        	}	//else
+        	
+        	//Handler for format option:
+			if (req.query.format === 'json')
+			{
+				res.type('json').send(response);
+			}	//if
+			else if (req.query.format === 'xml')
+			{
+				let xml = js2xmlparser.parse("neighborhoods", response);
+				res.type('xml').send(xml);
+			}	//else if
+			else
+			{
+				res.type('json').send(response);
+			}	//else
+        }	//else
+    });	//db.all
 });	//app.get
 
+/*
 //GET request handler for incidents
 app.get('/incidents', (req, res) => 
 {
