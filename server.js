@@ -26,6 +26,10 @@ var db = new sqlite3.Database(db_filename, sqlite3.OPEN_READWRITE, (err) => {
     }
 });
 
+//Start server 
+var server = app.listen(port);
+console.log('Now listening on port ' + port);
+
 //GET request handler for codes
 app.get('/codes', (req, res) => 
 {
@@ -328,6 +332,3 @@ app.put('/new-incident', (req, res) =>
     }); //db.get
 	
 });	//app.put
-
-var server = app.listen(port);
-console.log('Now listening on port ' + port);
