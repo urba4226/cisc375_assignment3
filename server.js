@@ -242,7 +242,6 @@ app.get('/incidents', (req, res) =>
     {
         query = query + " Limit 10000";
     }
-    console.log (query);
     db.all(query, (err, rows) =>
     {
         if (err)
@@ -318,7 +317,6 @@ app.put('/new-incident', (req, res) =>
             {
                 if (err)
                 {
-                    console.log(err);
                     res.status(500).send('Error adding new incident');
                 }   //if
                 else
