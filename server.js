@@ -45,7 +45,7 @@ app.get('/codes', (req, res) =>
         	//Handler for code:
         	if (req.query.code)
         	{
-        		var codes = req.query.code.split(",");
+        		let codes = req.query.code.split(",");
         		for (let i=0; i<rows.length; i++)
 	        	{
 	        		if (codes.includes(rows[i].code.toString(10)))
@@ -99,7 +99,7 @@ app.get('/neighborhoods', (req, res) =>
         	//Handler for code:
         	if (req.query.id)
         	{
-        		var ids = req.query.id.split(",");
+        		let ids = req.query.id.split(",");
         		for (let i=0; i<rows.length; i++)
 	        	{
 	        		if (ids.includes(rows[i].neighborhood_number.toString(10)))
@@ -165,15 +165,24 @@ app.get('/incidents', (req, res) =>
     													'neighborhood_number': rows[i].neighborhood_number,
     													'block': rows[i].block
         											};
+                //Handler for id:
         		if (req.query.id)
         		{
-        			console.log("ID true");
 					let ids = req.query.id.split(",");
     				if(!(ids.includes(temp['I' + rows[i].case_number].neighborhood_number.toString(10))))
     				{
     					test = false;
     				}	//if
         		}	//if
+                //Handler for code:
+                if (req.query.code)
+                {
+                    let codes = req.query.code.split(",");
+                    if (!(codes.includes(rows[i].code.toString(10))))
+                    {
+                        test = false;
+                    }   //if
+                }   //if
         		if (test)
         		{
         			response['I' + rows[i].case_number] = 	{
