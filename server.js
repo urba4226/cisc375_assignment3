@@ -183,6 +183,15 @@ app.get('/incidents', (req, res) =>
                         test = false;
                     }   //if
                 }   //if
+                //Handler for grid:
+                if (req.query.grid)
+                {
+                    let grids = req.query.grid.split(",");
+                    if (!(grids.includes(rows[i].police_grid.toString(10))))
+                    {
+                        test = false;
+                    }   //if
+                }   //if
         		if (test)
         		{
         			response['I' + rows[i].case_number] = 	{
