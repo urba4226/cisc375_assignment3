@@ -134,7 +134,160 @@ app.get('/neighborhoods', (req, res) =>
     });	//db.all
 });	//app.get
 
+app.get('/incidents', (req, res) => 
+{
+    let query = "SELECT * FROM Incidents";
+
+    let first = true;
+    //Handler for id:
+    if (req.query.id)
+    {
+        let ids = req.query.id.split(",");
+        if (first)
+        {
+            first = false;
+            query = query + " WHERE neighborhood_number = " + ids[0];
+            for (let j = 1; j<ids.length; j++)
+            {
+                query = query + " OR neighborhood_number = " + ids[j];
+            }
+        }
+        else
+        {
+            query = query + " AND neighborhood_number = " + ids[0];
+            for (let j = 1; j<ids.length; j++)
+            {
+                query = query + " OR neighborhood_number = " + ids[j];
+            }
+        }
+    }
+    //Handler for code:
+    if (req.query.code)
+    {
+        let codes = req.query.code.split(",");
+        if (first)
+        {
+            first = false;
+            query = query + " WHERE code = " + codes[0];
+            for (let j = 1; j<codes.length; j++)
+            {
+                query = query + " OR code = " + codes[j];
+            }   //for
+        }   //if
+        else
+        {
+            query = query + " AND code = " + codes[0];
+            for (let j = 1; j<codes.length; j++)
+            {
+                query = query + " OR code = " + codes[j];
+            }   //for
+        }   //else
+    }   //if
+    //Handler for start_date:
+    if(req.query.start_date)
+    {
+        if (first)
+        {
+            first = false;
+            query = query + " WHERE strftime('%s', date_time) >= strftime('%s', '" + req.query.start_date + "')";
+        }   //if
+        else
+        {
+            query = query + " AND strftime('%s', date_time) >= strftime('%s', '" + req.query.start_date + "')";
+        }   //else
+    }   //if
+    //Handler for end_date:
+    if(req.query.end_date)
+    {
+        if (first)
+        {
+            first = false;
+            query = query + " WHERE strftime('%s', date_time) <= strftime('%s', '" + req.query.end_date + "')";
+        }   //if
+        else
+        {
+            query = query + " AND strftime('%s', date_time) <= strftime('%s', '" + req.query.end_date + "')";
+        }   //else
+    }   //if
+    //Handler for grid:
+    if (req.query.grid)
+    {
+        let grids = req.query.grid.split(",");
+        if (first)
+        {
+            first = false;
+            query = query + " WHERE police_grid = " + grids[0];
+            for (let j = 1; j<grids.length; j++)
+            {
+                query = query + " OR police_grid = " + grids[j];
+            }
+        }
+        else
+        {
+            query = query + " AND police_grid = " + grids[0];
+            for (let j = 1; j<grids.length; j++)
+            {
+                query = query + " OR police_grid = " + grids[j];
+            }
+        }
+    }
+
+    query = query + " ORDER BY date_time desc";
+    //Handler for limit:
+    if (req.query.limit)
+    {
+        query = query + " Limit " + req.query.limit;
+    }
+    else
+    {
+        query = query + " Limit 10000";
+    }
+    console.log (query);
+    db.all(query, (err, rows) =>
+    {
+        if (err)
+        {
+            let msg = "Error: could not retrieve data from database";
+            Write404Error(res, msg);
+        }   //if
+        else
+        {
+            response = {};
+            for (let i=0; i<rows.length; i++)
+            {
+                let datetime = rows[i].date_time.split("T");
+                let date = datetime[0];
+                let time = datetime[1];
+                response['I' + rows[i].case_number] =   {
+                                                                'date': date,
+                                                                'time': time,
+                                                                'code': rows[i].code,
+                                                                'incident': rows[i].incident,
+                                                                'police_grid': rows[i].police_grid,
+                                                                'neighborhood_number': rows[i].neighborhood_number,
+                                                                'block': rows[i].block
+                                                            };
+            }   //for
+            //Handler for format option:
+            if (req.query.format === 'json')
+            {
+                res.type('json').send(response);
+            }   //if
+            else if (req.query.format === 'xml')
+            {
+                let xml = js2xmlparser.parse("incidents", response);
+                res.type('xml').send(xml);
+            }   //else if
+            else
+            {
+                res.type('json').send(response);
+            }   //else
+        }
+    });
+});
+
 //GET request handler for incidents
+/*
 app.get('/incidents', (req, res) => 
 {
 	let query = "SELECT * FROM Incidents ORDER BY date_time desc";
@@ -192,6 +345,15 @@ app.get('/incidents', (req, res) =>
                         test = false;
                     }   //if
                 }   //if
+                //Handler for start_date:
+                if (req.query.start_date)
+                {
+
+                }   //if
+                //Handler for end_date:
+                {
+
+                }   //if
         		if (test)
         		{
         			response['I' + rows[i].case_number] = 	{
@@ -224,7 +386,6 @@ app.get('/incidents', (req, res) =>
     });	//db.all
 });	//app.get
 
-/*
 //PUT request handler for new-incident
 app.put('/new-incident', (req, res) =>
 {
