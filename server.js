@@ -205,28 +205,33 @@ app.get('/incidents', (req, res) =>
         if (first)
         {
             first = false;
-            query = query + " WHERE strftime('%s', date_time) >= strftime('%s', '?')";
-            parameters.push(req.query.start_date);
+            query = query + " WHERE (strftime('%s', date_time) > strftime('%s', '" + req.query.start_date + "')";
+            //parameters.push(req.query.start_date);
+            query = query + ")";
         }   //if
         else
         {
-            query = query + " AND strftime('%s', date_time) >= strftime('%s', '?')";
-            parameters.push(req.query.start_date);
+            query = query + " AND (strftime('%s', date_time) > strftime('%s', '" + req.query.start_date + "')";
+            //parameters.push(req.query.start_date);
+            query = query + ")";
         }   //else
     }   //if
     //Handler for end_date:
     if(req.query.end_date)
     {
+        let end_date = req.query.end_date + "T23:59:59" 
         if (first)
         {
             first = false;
-            query = query + " WHERE strftime('%s', date_time) <= strftime('%s', '?')";
-            parameters.push(req.query.end_date);
+            query = query + " WHERE (strftime('%s', date_time) < strftime('%s', '" + end_date + "')";
+            //parameters.push(req.query.end_date);
+            query = query + ")";
         }   //if
         else
         {
-            query = query + " AND strftime('%s', date_time) <= strftime('%s', '?')";
-            parameters.push(req.query.end_date);
+            query = query + " AND (strftime('%s', date_time) < strftime('%s', '" + end_date + "')";
+            //parameters.push(req.query.end_date);
+            query = query + ")";
         }   //else
     }   //if
     //Handler for grid:
@@ -269,6 +274,11 @@ app.get('/incidents', (req, res) =>
     {
         query = query + " Limit 10000";
     }   //else
+
+    for (let k=0; k<parameters.length; k++)
+    {
+        console.log(parameters[k]);
+    }
 
     db.all(query, parameters, (err, rows) =>
     {
@@ -356,3 +366,17 @@ app.put('/new-incident', (req, res) =>
     }); //db.get
 	
 });	//app.put
+
+function Write404Error(res, msg) 
+{
+    res.writeHead(404, {'Content-Type': 'text/plain'});
+    res.write(msg);
+    res.end();
+}   //Write404Error
+
+function WriteHtml(res, html) 
+{
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.write(html);
+    res.end();
+}   //WriteHtml
