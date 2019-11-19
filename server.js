@@ -141,7 +141,7 @@ app.get('/neighborhoods', (req, res) =>
 app.get('/incidents', (req, res) => 
 {
     let query = "SELECT * FROM Incidents";
-
+    let parameters = [];
     let first = true;
     //Handler for id:
     if (req.query.id)
@@ -150,19 +150,25 @@ app.get('/incidents', (req, res) =>
         if (first)
         {
             first = false;
-            query = query + " WHERE neighborhood_number = " + ids[0];
+            query = query + " WHERE (neighborhood_number = ?";// + ids[0]; 
+            parameters.push(ids[0]);
             for (let j = 1; j<ids.length; j++)
             {
-                query = query + " OR neighborhood_number = " + ids[j];
+                query = query + " OR neighborhood_number = ?";// + ids[j];
+                parameters.push(ids[j]);
             }
+            query = query + ")";
         }
         else
         {
-            query = query + " AND neighborhood_number = " + ids[0];
+            query = query + " AND (neighborhood_number = ?";// + ids[0];
+            parameters.push(ids[0]);
             for (let j = 1; j<ids.length; j++)
             {
-                query = query + " OR neighborhood_number = " + ids[j];
+                query = query + " OR neighborhood_number = ?";// + ids[j];
+                parameters.push(ids[j]);
             }
+            query = query + ")";
         }
     }
     //Handler for code:
@@ -172,19 +178,25 @@ app.get('/incidents', (req, res) =>
         if (first)
         {
             first = false;
-            query = query + " WHERE code = " + codes[0];
+            query = query + " WHERE (code = ?";// + codes[0];
+            parameters.push(codes[0]);
             for (let j = 1; j<codes.length; j++)
             {
-                query = query + " OR code = " + codes[j];
+                query = query + " OR code = ?";// + codes[j];
+                parameters.push(codes[j]);
             }   //for
+            query = query + ")";
         }   //if
         else
         {
-            query = query + " AND code = " + codes[0];
+            query = query + " AND (code = ?";// + codes[0];
+            parameters.push(codes[0]);
             for (let j = 1; j<codes.length; j++)
             {
-                query = query + " OR code = " + codes[j];
+                query = query + " OR code = ?";// + codes[j];
+                parameters.push(codes[j]);
             }   //for
+            query = query + ")";
         }   //else
     }   //if
     //Handler for start_date:
@@ -193,11 +205,13 @@ app.get('/incidents', (req, res) =>
         if (first)
         {
             first = false;
-            query = query + " WHERE strftime('%s', date_time) >= strftime('%s', '" + req.query.start_date + "')";
+            query = query + " WHERE strftime('%s', date_time) >= strftime('%s', '?')";
+            parameters.push(req.query.start_date);
         }   //if
         else
         {
-            query = query + " AND strftime('%s', date_time) >= strftime('%s', '" + req.query.start_date + "')";
+            query = query + " AND strftime('%s', date_time) >= strftime('%s', '?')";
+            parameters.push(req.query.start_date);
         }   //else
     }   //if
     //Handler for end_date:
@@ -206,11 +220,13 @@ app.get('/incidents', (req, res) =>
         if (first)
         {
             first = false;
-            query = query + " WHERE strftime('%s', date_time) <= strftime('%s', '" + req.query.end_date + "')";
+            query = query + " WHERE strftime('%s', date_time) <= strftime('%s', '?')";
+            parameters.push(req.query.end_date);
         }   //if
         else
         {
-            query = query + " AND strftime('%s', date_time) <= strftime('%s', '" + req.query.end_date + "')";
+            query = query + " AND strftime('%s', date_time) <= strftime('%s', '?')";
+            parameters.push(req.query.end_date);
         }   //else
     }   //if
     //Handler for grid:
@@ -220,19 +236,25 @@ app.get('/incidents', (req, res) =>
         if (first)
         {
             first = false;
-            query = query + " WHERE police_grid = " + grids[0];
+            query = query + " WHERE (police_grid = ?";// + grids[0];
+            parameters.push(grids[0]);
             for (let j = 1; j<grids.length; j++)
             {
-                query = query + " OR police_grid = " + grids[j];
+                query = query + " OR police_grid = ?";// + grids[j];
+                parameters.push(grids[j]);
             }
+            query = query + ")";
         }
         else
         {
-            query = query + " AND police_grid = " + grids[0];
+            query = query + " AND (police_grid = ?";// + grids[0];
+            parameters.push(grids[0]);
             for (let j = 1; j<grids.length; j++)
             {
-                query = query + " OR police_grid = " + grids[j];
+                query = query + " OR police_grid = ?";// + grids[j];
+                parameters.push(grids[j]);
             }
+            query = query + ")";
         }
     }
 
@@ -240,13 +262,15 @@ app.get('/incidents', (req, res) =>
     //Handler for limit:
     if (req.query.limit)
     {
-        query = query + " Limit " + req.query.limit;
-    }
+        query = query + " Limit ?";
+        parameters.push(req.query.limit);
+    }   //if
     else
     {
         query = query + " Limit 10000";
-    }
-    db.all(query, (err, rows) =>
+    }   //else
+
+    db.all(query, parameters, (err, rows) =>
     {
         if (err)
         {
