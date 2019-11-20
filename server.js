@@ -329,6 +329,7 @@ app.put('/new-incident', (req, res) =>
             req.body.police_grid && req.body.neighborhood_number && req.body.block))
     {
         res.status(500).send('Error: Missing parameter. Required parameters: case_number, date, time, code, incident, police_grid, neighborhood_number, block');
+        return;
     }   //if
 	var has_id = false;
     let query = "Select * FROM incidents WHERE case_number = ?";
