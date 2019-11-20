@@ -348,7 +348,7 @@ app.put('/new-incident', (req, res) =>
             let parameters = [req.body.case_number, date_time, req.body.code, req.body.incident, 
                                 req.body.police_grid, req.body.neighborhood_number, req.body.block];
             let query = "";
-            query = "INSERT INTO Incidents (case_number, date_time, code, incident, police_grid, neighborhood_number, block) ";
+            query = "INSERT INTO Incidents (case_number, date_time, code, incident, police_grid, neighborhood_number, block)";
             query = query + " VALUES(?, ?, ?, ?, ?, ?, ?)";
             db.run(query, parameters, (err, rows) =>
             {
