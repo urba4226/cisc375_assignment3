@@ -40,6 +40,7 @@ app.get('/codes', (req, res) =>
     //Handler for code:
     if (req.query.code)
     {
+        //Put list of codes into array:
         let codes = req.query.code.split(",");
         query = query + " WHERE (code = ?";
         parameters.push(codes[0]);
@@ -96,6 +97,7 @@ app.get('/neighborhoods', (req, res) =>
     //Handler for id:
     if (req.query.id)
     {
+        //Put list of ids into array:
         let ids = req.query.id.split(",");
         query = query + " WHERE (neighborhood_number = ?";
         parameters.push(ids[0]);
@@ -150,6 +152,7 @@ app.get('/incidents', (req, res) =>
     //Handler for id:
     if (req.query.id)
     {
+        //Put list of ids into array:
         let ids = req.query.id.split(",");
         if (first)
         {
@@ -178,6 +181,7 @@ app.get('/incidents', (req, res) =>
     //Handler for code:
     if (req.query.code)
     {
+        //Put list of codes into array:
         let codes = req.query.code.split(",");
         if (first)
         {
@@ -241,6 +245,7 @@ app.get('/incidents', (req, res) =>
     //Handler for grid:
     if (req.query.grid)
     {
+        //Put list of grids into array:
         let grids = req.query.grid.split(",");
         if (first)
         {
@@ -325,12 +330,15 @@ app.get('/incidents', (req, res) =>
 //PUT request handler for new-incident
 app.put('/new-incident', (req, res) =>
 {
+    //Make sure right number of parameters are entered:
     if(!(req.body.case_number && req.body.date && req.body.time && req.body.code && req.body.incident && 
             req.body.police_grid && req.body.neighborhood_number && req.body.block))
     {
         res.status(500).send('Error: Missing parameter. Required parameters: case_number, date, time, code, incident, police_grid, neighborhood_number, block');
         return;
     }   //if
+
+    //Make sure the case number doesn't exist:
 	var has_id = false;
     let query = "Select * FROM incidents WHERE case_number = ?";
 	db.all(query, [req.body.case_number], (err, rows) =>
@@ -351,6 +359,8 @@ app.put('/new-incident', (req, res) =>
             let query = "";
             query = "INSERT INTO Incidents (case_number, date_time, code, incident, police_grid, neighborhood_number, block)";
             query = query + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+
+            //Add new incident to db:
             db.run(query, parameters, (err, rows) =>
             {
                 if (err)
