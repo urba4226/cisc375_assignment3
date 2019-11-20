@@ -20,10 +20,10 @@ app.use(bodyParser.urlencoded({extended:true}));
 var db = new sqlite3.Database(db_filename, sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
         console.log('Error opening ' + db_filename);
-    }
+    }   //if
     else {
         console.log('Now connected to ' + db_filename);
-    }
+    }   //else
 });
 
 //Start server 
@@ -33,38 +33,41 @@ console.log('Now listening on port ' + port);
 //GET request handler for codes
 app.get('/codes', (req, res) => 
 {
-	let query = "SELECT * FROM Codes ORDER BY code";
-    db.all(query, (err, rows) =>
+	//let query = "SELECT * FROM Codes ORDER BY code";
+    let query = "SELECT * FROM Codes";
+    let parameters = [];
+
+    //Handler for code:
+    if (req.query.code)
+    {
+        let codes = req.query.code.split(",");
+        query = query + " WHERE (code = ?";
+        parameters.push(codes[0]);
+        for (let j = 1; j<codes.length; j++)
+        {
+            query = query + " OR code = ?";
+            parameters.push(codes[j]);
+        }   //for
+        query = query + ")";
+    }   //if
+
+    query = query + " ORDER BY code";
+
+    db.all(query, parameters, (err, rows) =>
     {
         if (err)
         {
-            let msg = "Error: could not retrieve data from database";
-            Write404Error(res, msg);
+            res.status(500).send('Error: could not retrieve data from database');
         }   //if
         else
         {
         	//Build JSON object:
         	let response = {};
 
-        	//Handler for code:
-        	if (req.query.code)
+			for (let i=0; i<rows.length; i++)
         	{
-        		let codes = req.query.code.split(",");
-        		for (let i=0; i<rows.length; i++)
-	        	{
-	        		if (codes.includes(rows[i].code.toString(10)))
-	        		{
-	        			response['C' + rows[i].code] = rows[i].incident_type;
-	        		}	//if
-	        	}	//for
-        	}	//if
-        	else
-        	{
-				for (let i=0; i<rows.length; i++)
-	        	{
-	        		response['C' + rows[i].code] = rows[i].incident_type;
-	        	}	//for
-        	}	//else
+        		response['C' + rows[i].code] = rows[i].incident_type;
+        	}	//for
         	
         	//Handler for format option:
 			if (req.query.format === 'json')
@@ -87,38 +90,39 @@ app.get('/codes', (req, res) =>
 //GET request handler for neighborhoods
 app.get('/neighborhoods', (req, res) => 
 {
-	let query = "SELECT * FROM Neighborhoods ORDER BY neighborhood_number";
-    db.all(query, (err, rows) =>
+    let query = "SELECT * FROM Neighborhoods";
+    let parameters = [];
+
+    //Handler for id:
+    if (req.query.id)
+    {
+        let ids = req.query.id.split(",");
+        query = query + " WHERE (neighborhood_number = ?";
+        parameters.push(ids[0]);
+        for (let j = 1; j<ids.length; j++)
+        {
+            query = query + " OR neighborhood_number = ?";
+            parameters.push(ids[j]);
+        }   //for
+        query = query + ")";
+    }   //if
+
+    query = query + " ORDER BY neighborhood_number";
+
+    db.all(query, parameters, (err, rows) =>
     {
         if (err)
         {
-            let msg = "Error: could not retrieve data from database";
-            Write404Error(res, msg);
+            res.status(500).send('Error: could not retrieve data from database');
         }   //if
         else
         {
         	//Build JSON object:
         	let response = {};
-
-        	//Handler for code:
-        	if (req.query.id)
+			for (let i=0; i<rows.length; i++)
         	{
-        		let ids = req.query.id.split(",");
-        		for (let i=0; i<rows.length; i++)
-	        	{
-	        		if (ids.includes(rows[i].neighborhood_number.toString(10)))
-	        		{
-	        			response['N' + rows[i].neighborhood_number] = rows[i].neighborhood_name;
-	        		}	//if
-	        	}	//for
-        	}	//if
-        	else
-        	{
-				for (let i=0; i<rows.length; i++)
-	        	{
-	        		response['N' + rows[i].neighborhood_number] = rows[i].neighborhood_name;
-	        	}	//for
-        	}	//else
+        		response['N' + rows[i].neighborhood_number] = rows[i].neighborhood_name;
+        	}	//for
         	
         	//Handler for format option:
 			if (req.query.format === 'json')
@@ -150,27 +154,27 @@ app.get('/incidents', (req, res) =>
         if (first)
         {
             first = false;
-            query = query + " WHERE (neighborhood_number = ?";// + ids[0]; 
+            query = query + " WHERE (neighborhood_number = ?";
             parameters.push(ids[0]);
             for (let j = 1; j<ids.length; j++)
             {
-                query = query + " OR neighborhood_number = ?";// + ids[j];
+                query = query + " OR neighborhood_number = ?";
                 parameters.push(ids[j]);
-            }
+            }   //for
             query = query + ")";
-        }
+        }   //if
         else
         {
-            query = query + " AND (neighborhood_number = ?";// + ids[0];
+            query = query + " AND (neighborhood_number = ?";
             parameters.push(ids[0]);
             for (let j = 1; j<ids.length; j++)
             {
-                query = query + " OR neighborhood_number = ?";// + ids[j];
+                query = query + " OR neighborhood_number = ?";
                 parameters.push(ids[j]);
-            }
+            }   //for
             query = query + ")";
-        }
-    }
+        }   //else
+    }   //if
     //Handler for code:
     if (req.query.code)
     {
@@ -178,22 +182,22 @@ app.get('/incidents', (req, res) =>
         if (first)
         {
             first = false;
-            query = query + " WHERE (code = ?";// + codes[0];
+            query = query + " WHERE (code = ?";
             parameters.push(codes[0]);
             for (let j = 1; j<codes.length; j++)
             {
-                query = query + " OR code = ?";// + codes[j];
+                query = query + " OR code = ?";
                 parameters.push(codes[j]);
             }   //for
             query = query + ")";
         }   //if
         else
         {
-            query = query + " AND (code = ?";// + codes[0];
+            query = query + " AND (code = ?";
             parameters.push(codes[0]);
             for (let j = 1; j<codes.length; j++)
             {
-                query = query + " OR code = ?";// + codes[j];
+                query = query + " OR code = ?";
                 parameters.push(codes[j]);
             }   //for
             query = query + ")";
@@ -205,14 +209,14 @@ app.get('/incidents', (req, res) =>
         if (first)
         {
             first = false;
-            query = query + " WHERE (strftime('%s', date_time) > strftime('%s', '" + req.query.start_date + "')";
-            //parameters.push(req.query.start_date);
+            query = query + " WHERE (strftime('%s', date_time) > strftime('%s', ?)";
+            parameters.push(req.query.start_date);
             query = query + ")";
         }   //if
         else
         {
-            query = query + " AND (strftime('%s', date_time) > strftime('%s', '" + req.query.start_date + "')";
-            //parameters.push(req.query.start_date);
+            query = query + " AND (strftime('%s', date_time) > strftime('%s', ?)";
+            parameters.push(req.query.start_date);
             query = query + ")";
         }   //else
     }   //if
@@ -223,14 +227,14 @@ app.get('/incidents', (req, res) =>
         if (first)
         {
             first = false;
-            query = query + " WHERE (strftime('%s', date_time) < strftime('%s', '" + end_date + "')";
-            //parameters.push(req.query.end_date);
+            query = query + " WHERE (strftime('%s', date_time) < strftime('%s', ?)";
+            parameters.push(end_date);
             query = query + ")";
         }   //if
         else
         {
-            query = query + " AND (strftime('%s', date_time) < strftime('%s', '" + end_date + "')";
-            //parameters.push(req.query.end_date);
+            query = query + " AND (strftime('%s', date_time) < strftime('%s', ?)";
+            parameters.push(end_date);
             query = query + ")";
         }   //else
     }   //if
@@ -241,29 +245,30 @@ app.get('/incidents', (req, res) =>
         if (first)
         {
             first = false;
-            query = query + " WHERE (police_grid = ?";// + grids[0];
+            query = query + " WHERE (police_grid = ?";
             parameters.push(grids[0]);
             for (let j = 1; j<grids.length; j++)
             {
-                query = query + " OR police_grid = ?";// + grids[j];
+                query = query + " OR police_grid = ?";
                 parameters.push(grids[j]);
-            }
+            }   //for
             query = query + ")";
-        }
+        }   //if
         else
         {
-            query = query + " AND (police_grid = ?";// + grids[0];
+            query = query + " AND (police_grid = ?";
             parameters.push(grids[0]);
             for (let j = 1; j<grids.length; j++)
             {
-                query = query + " OR police_grid = ?";// + grids[j];
+                query = query + " OR police_grid = ?";
                 parameters.push(grids[j]);
-            }
+            }   //for
             query = query + ")";
-        }
-    }
+        }   //else
+    }   //if
 
     query = query + " ORDER BY date_time desc";
+
     //Handler for limit:
     if (req.query.limit)
     {
@@ -275,17 +280,11 @@ app.get('/incidents', (req, res) =>
         query = query + " Limit 10000";
     }   //else
 
-    for (let k=0; k<parameters.length; k++)
-    {
-        console.log(parameters[k]);
-    }
-
     db.all(query, parameters, (err, rows) =>
     {
         if (err)
         {
-            let msg = "Error: could not retrieve data from database";
-            Write404Error(res, msg);
+            res.status(500).send('Error: could not retrieve data from database');
         }   //if
         else
         {
@@ -364,19 +363,4 @@ app.put('/new-incident', (req, res) =>
             }); //db.run
         }   //else
     }); //db.get
-	
 });	//app.put
-
-function Write404Error(res, msg) 
-{
-    res.writeHead(404, {'Content-Type': 'text/plain'});
-    res.write(msg);
-    res.end();
-}   //Write404Error
-
-function WriteHtml(res, html) 
-{
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write(html);
-    res.end();
-}   //WriteHtml
