@@ -1,6 +1,7 @@
 // Built-in Node.js modules
 var fs = require('fs');
 var path = require('path');
+var cors = require('cors');
 
 // NPM modules
 var express = require('express');
@@ -15,6 +16,7 @@ var port = 8000;
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(cors());
 
 // open usenergy.sqlite3 database
 var db = new sqlite3.Database(db_filename, sqlite3.OPEN_READWRITE, (err) => {
