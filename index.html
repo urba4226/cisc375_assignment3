@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>St. Paul Crime</title>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script type="application/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script type="application/javascript" src="scripts/crimesearch.js"></script>
+</head>
+<body onload="Init()">
+    <div id="app">
+        <!--
+        <input id="search" type="text" v-model="spotify_search" :placeholder="input_placeholder"></input>
+        <select id="type" v-model="spotify_type">
+            <option v-for="option in spotify_type_options" :value="option.value">{{ option.text }}</option>
+        </select>
+        -->
+        <button type="button" @click="CrimeSearch">Search</button>
+        <table>
+            <thead>
+                <tr>
+                    <th> Case Number </th>
+                    <th> Date </th>
+                    <th> Time </th>
+                    <th> Neighborhood Name </th>
+                    <th> Police Grid </th>
+                    <th> Address </th>
+                    <th> Incident Type </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="crime in search_results">
+                    <td> {{ crime.name }} </td>
+                    <td> {{ crime.date }} </td>
+                    <td> {{ crime.time }} </td>
+                    <td> {{ crime.neighborhood_number }} </td>
+                    <td> {{ crime.police_grid }} </td>
+                    <td> {{ crime.block }} </td>
+                    <td> {{ crime.incident }} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
