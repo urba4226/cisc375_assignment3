@@ -20,12 +20,12 @@
 </head>
 <body onload="Init()">
     <div id="app">
-        <!--
-        <input id="search" type="text" v-model="spotify_search" :placeholder="input_placeholder"></input>
-        <select id="type" v-model="spotify_type">
-            <option v-for="option in spotify_type_options" :value="option.value">{{ option.text }}</option>
-        </select>
-        -->
+        <!-- Neighborhood Checkboxes: -->
+        <span v-for="(neighborhood, key) in neighborhoods">
+            <input type="checkbox" :value="key" v-model="selectedNeighborhoods"> <span class="checkbox-label"> {{ neighborhood }} </span> <br>
+        </span>
+        <span>Selected locations: {{ selectedNeighborhoods }}</span>
+
         <button type="button" @click="CrimeSearch">Search</button>
         <table class="table table-hover table-sm">
             <thead class="thead-dark">
@@ -45,7 +45,6 @@
                     <td> {{ crime.date }} </td>
                     <td> {{ crime.time }} </td>
                     <td> {{ neighborhoods["N" + crime.neighborhood_number] }} </td>
-                    <!--<td> {{ crime.neighborhood_number }} </td>-->
                     <td> {{ crime.police_grid }} </td>
                     <td> {{ crime.block }} </td>
                     <td> {{ crime.incident }} </td>
