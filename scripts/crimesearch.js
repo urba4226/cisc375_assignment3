@@ -27,10 +27,13 @@ function Init()
     }   //for
     */
 
+    loadNeighborhoods();
+
     app = new Vue({
         el: "#app",
         data: {
-            search_results: []
+            search_results: [],
+            neighborhoods: []
         }  //data
         /*
         computed: {
@@ -44,11 +47,26 @@ function Init()
     }); //Vue
 }   //init
 
+function loadNeighborhoods()
+{
+    let request = {
+        url: "http://cisc-dean.stthomas.edu:8022/neighborhoods",
+        dataType: "json",
+        success: NeighborhoodData
+    };  //request
+    $.ajax(request);
+}   //loadNeighborhoods
+
+function NeighborhoodData(data)
+{
+    app.neighborhoods = data;
+    console.log(data);
+}   //CrimeData
+
 function CrimeSearch(event)
 {
     let request = {
-        url: "http://cisc-dean.stthomas.edu:8022/incidents?start_date=2019-10-01&end_date=2019-10-31", 
-        //+ app.spotify_search + "&type=" + app.spotify_type,
+        url: "http://cisc-dean.stthomas.edu:8022/incidents?start_date=2019-10-01&end_date=2019-10-31",
         dataType: "json",
         success: CrimeData
     };  //request
@@ -57,6 +75,6 @@ function CrimeSearch(event)
 
 function CrimeData(data)
 {
-    app.search_results = data.items;
-    console.log(data.items);
+    app.search_results = data;
+    console.log(data);
 }   //CrimeData
