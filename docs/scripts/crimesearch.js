@@ -33,7 +33,8 @@ function Init()
         el: "#app",
         data: {
             search_results: [],
-            neighborhoods: []
+            neighborhoods: [],
+            selectedNeighborhoods: []
         }  //data
         /*
         computed: {
