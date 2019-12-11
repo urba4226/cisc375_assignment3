@@ -1,5 +1,6 @@
 var app;
 var api;
+var mymap;
 
 function Prompt() {
     $("#dialog-form").dialog({
@@ -22,6 +23,16 @@ function Prompt() {
 function Init(crime_api_url)
 {
     api = crime_api_url;
+    mymap = L.map('mapid').setView([44.95, -93.09], 13);
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        accessToken: 'pk.eyJ1IjoidHVja2VydTE2Njg3IiwiYSI6ImNrNDFzczRubzA0azkzbHA1dzB6YWRoa3kifQ.K159LksBQPayp26P3E1ppQ'
+    }).addTo(mymap);
+    mymap.dragging.enable();
+
     LoadNeighborhoods(crime_api_url);
     LoadIncidents(crime_api_url);
     CrimeSearch(crime_api_url);
@@ -177,7 +188,7 @@ function CrimeData(data)
     console.log(data);
 }   //CrimeData
 
-function AddCrime(case_num)
+function AddCrime(address)
 {
-    console.log("case_num: " + case_num);
+    console.log("address: " + address);
 }   //AddCrime
