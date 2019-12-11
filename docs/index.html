@@ -7,44 +7,127 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <!--<link rel="stylesheet" href="css/style.css"/>-->
 
     <!-- Bootstrap scripts -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script type="application/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="application/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script type="application/javascript" src="scripts/crimesearch.js"></script>
-	
-	 <!-- Leaflet CSS -->
-	 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
    crossorigin=""/>
    
-   <!-- Leaflet Scripts -->
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    <!-- Leaflet Scripts -->
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
    crossorigin=""></script>
-   
 </head>
-<body onload="Init()">
+<body onload="Prompt()">
+     <!-- Prompt -->
+    <div id="dialog-form">
+        <label for="name">URL for St. Paul Crime API:</label>
+        <input type="text" id="prompt_input" class="text ui-widget-content ui-corner-all" style="width: 320px;" v-model="api_url"/>
+    </div>
+    <!-- End: Prompt -->
 
-	 <div id="mapid">
-		var mymap = L.map('mapid').setView([44.954, -93.09], 13);
-		var marker = L.marker([44.954, -93.09]).addTo(mymap);
-		marker.bindPopup("Example marker and pop-up for crime stats").openPopup();
-	 </div>
-	
     <div id="app">
-        <!-- Neighborhood Checkboxes: -->
-        <span v-for="(neighborhood, key) in neighborhoods">
-            <input type="checkbox" :value="key" v-model="selectedNeighborhoods"> <span class="checkbox-label"> {{ neighborhood }} </span> <br>
-        </span>
-        <span>Selected locations: {{ selectedNeighborhoods }}</span>
+        <div id="mapid" style="width: 600px; height: 400px;"></div>
+        <script>
 
-        <button type="button" @click="CrimeSearch">Search</button>
+            var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                accessToken: 'pk.eyJ1IjoidHVja2VydTE2Njg3IiwiYSI6ImNrNDFzczRubzA0azkzbHA1dzB6YWRoa3kifQ.K159LksBQPayp26P3E1ppQ'
+            }).addTo(mymap);
+            mymap.dragging.enable();
+
+        </script>
+        <!-- Filter by Neighborhood: -->
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseNeighborhood" aria-expanded="false" aria-controls="collapseNeighborhood">
+            Filter by Neighborhood
+        </button>
+        <div class="collapse" id="collapseNeighborhood">
+            <div class="card card-body">
+                <div v-for="(neighborhood, key) in neighborhoods" class="checkbox">
+                    <label>
+                        <input type="checkbox" :value="key.substring(1)" v-model="selectedNeighborhoods"> <span class="checkbox-label"> {{ neighborhood }} </span>
+                    </label>
+                </div>
+                <span>Selected locations: {{ selectedNeighborhoods }}</span><br>
+            </div>
+        </div>
+
+        <!-- Filter by Incident: -->
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseIncident" aria-expanded="false" aria-controls="collapseIncident">
+            Filter by Incident
+        </button>
+        <div class="collapse" id="collapseIncident">
+            <div class="card card-body">
+                <div v-for="(incident, key) in incidents" class="checkbox">
+                    <label>
+                        <input type="checkbox" :value="key.substring(1)" v-model="selectedIncidents"> <span class="checkbox-label"> {{ incident }} </span>
+                    </label>
+                </div>
+                <span>Selected Incidents: {{ selectedIncidents }}</span><br>
+            </div>
+        </div>
+
+        <!-- Filter by Date: -->
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDate" aria-expanded="false" aria-controls="collapseDate">
+            Filter by Date
+        </button>
+        <div class="collapse" id="collapseDate">
+            <div class="card card-body">
+                <!-- Start Date: -->
+                <label for="start_date">Start Date:</label>
+                <input type="date" id="start_date" name="start_date"
+                       value="MM-DD-YYYY"
+                       min="08-14-2014" max="10-30-2019" v-model="start_date"><br>
+                <span>Selected Start date: {{ start_date }}</span><br>
+
+                <!-- End Date: -->
+                <label for="end_date">End Date:</label>
+                <input type="date" id="end_date" name="end_date"
+                       value="MM-DD-YYYY"
+                       min="08-14-2014" max="10-30-2019" v-model="end_date"><br>
+                <span>Selected End Date: {{ end_date }}</span><br>
+            </div>
+        </div>
+
+        <!-- Filter by Time: -->
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseTime" aria-expanded="false" aria-controls="collapseTime">
+            Filter by Time
+        </button>
+        <div class="collapse" id="collapseTime">
+            <div class="card card-body">
+                <!-- Start Time: -->
+                <label for="start_time">Start Time:</label>
+                <input type="time" id="start_time" name="start_time"
+                       min="00:00:00" max="23:59:59" v-model="start_time"><br>
+                <span>Selected Start Time: {{ start_time }}</span><br>
+
+                <!-- End Time: -->
+                <label for="end_time">End Time:</label>
+                <input type="time" id="end_time" name="end_time"
+                       min="00:00:00" max="23:59:59" v-model="end_time"><br>
+                <span>Selected Start Time: {{ start_time }}</span><br>
+            </div>
+        </div><br>
+
+        <!-- Button to refresh table results with filters: -->
+        <button type="button" @click="FilteredSearch(selectedNeighborhoods, selectedIncidents, start_date, end_date)">Filter Results</button>
+
         <table class="table table-hover table-sm">
             <thead class="thead-dark">
                 <tr>
@@ -58,7 +141,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(crime, key) in search_results">
+                <!-- v-if="lat > min_lat && lat < max_lat && long > min_long && long < max_long" -->
+                <!-- How to pull data from each row when clicked? -->
+                <tr v-for="(crime, key) in search_results" @click="AddCrime(key)">
                     <td> {{ key.substring(1) }} </td>
                     <td> {{ crime.date }} </td>
                     <td> {{ crime.time }} </td>
