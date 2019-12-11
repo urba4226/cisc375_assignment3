@@ -17,8 +17,26 @@
     <script type="application/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script type="application/javascript" src="scripts/crimesearch.js"></script>
+	
+	 <!-- Leaflet CSS -->
+	 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+   
+   <!-- Leaflet Scripts -->
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin=""></script>
+   
 </head>
 <body onload="Init()">
+
+	 <div id="mapid">
+		var mymap = L.map('mapid').setView([44.954, -93.09], 13);
+		var marker = L.marker([44.954, -93.09]).addTo(mymap);
+		marker.bindPopup("Example marker and pop-up for crime stats").openPopup();
+	 </div>
+	
     <div id="app">
         <!-- Neighborhood Checkboxes: -->
         <span v-for="(neighborhood, key) in neighborhoods">
