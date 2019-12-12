@@ -31,7 +31,19 @@ function Init(crime_api_url)
         id: 'mapbox/streets-v11',
         accessToken: 'pk.eyJ1IjoidHVja2VydTE2Njg3IiwiYSI6ImNrNDFzczRubzA0azkzbHA1dzB6YWRoa3kifQ.K159LksBQPayp26P3E1ppQ'
     }).addTo(mymap);
-    mymap.dragging.enable();
+    mymap.on('mouseup', MapRelease);
+
+    //Stuff needed for map:
+    //getNorthWest()
+        //long > getNorthWest().lng
+        //lat < getNorthWest().lat
+    //getSouthEast()
+        //long < getSouthEast().lng
+        //lat > getSouthEast().lat
+    //getCenter()
+        //Returns lat/long of center
+    //mouseup event
+        //Fired when user releases mouse button on map
 
     LoadNeighborhoods(crime_api_url);
     LoadIncidents(crime_api_url);
@@ -215,6 +227,8 @@ function AddressSearch(address)
 
 function LocationData(data)
 {
+    console.log("Lat: " + data[0].lat);
+    console.log("Lon: " + data[0].lon);
     console.log(data);
 }   //LocationData
 
@@ -233,3 +247,10 @@ function CrimeType(code)
         return "";
     }   //else
 }   //CrimeType
+
+function MapRelease(event)
+{
+    console.log(event.latlng);
+    console.log("Lat: " + event.latlng.lat);
+    console.log("Lng: " + event.latlng.lng);
+}   //MapRelease
