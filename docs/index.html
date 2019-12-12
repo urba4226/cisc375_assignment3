@@ -71,7 +71,6 @@
                         <input type="checkbox" :value="key.substring(1)" v-model="selectedNeighborhoods"> <span class="checkbox-label"> {{ neighborhood }} </span>
                     </label>
                 </div>
-                <span>Selected locations: {{ selectedNeighborhoods }}</span><br>
             </div>
         </div>
 
@@ -86,7 +85,6 @@
                         <input type="checkbox" :value="key.substring(1)" v-model="selectedIncidents"> <span class="checkbox-label"> {{ incident }} </span>
                     </label>
                 </div>
-                <span>Selected Incidents: {{ selectedIncidents }}</span><br>
             </div>
         </div>
 
@@ -101,14 +99,12 @@
                 <input type="date" id="start_date" name="start_date"
                        value="MM-DD-YYYY"
                        min="08-14-2014" max="10-30-2019" v-model="start_date"><br>
-                <span>Selected Start date: {{ start_date }}</span><br>
 
                 <!-- End Date: -->
                 <label for="end_date">End Date:</label>
                 <input type="date" id="end_date" name="end_date"
                        value="MM-DD-YYYY"
                        min="08-14-2014" max="10-30-2019" v-model="end_date"><br>
-                <span>Selected End Date: {{ end_date }}</span><br>
             </div>
         </div>
 
@@ -122,18 +118,23 @@
                 <label for="start_time">Start Time:</label>
                 <input type="time" id="start_time" name="start_time"
                        min="00:00:00" max="23:59:59" v-model="start_time"><br>
-                <span>Selected Start Time: {{ start_time }}</span><br>
 
                 <!-- End Time: -->
                 <label for="end_time">End Time:</label>
                 <input type="time" id="end_time" name="end_time"
                        min="00:00:00" max="23:59:59" v-model="end_time"><br>
-                <span>Selected Start Time: {{ start_time }}</span><br>
             </div>
         </div><br>
 
         <!-- Button to refresh table results with filters: -->
         <button type="button" @click="FilteredSearch(selectedNeighborhoods, selectedIncidents, start_date, end_date)">Filter Results</button>
+
+        <p>
+            Key for Table:<br>
+            Red = Violent Crimes<br>
+            Yellow = Property Crimes<br>
+            White = Other<br>
+        </p>
 
         <table class="table table-hover table-sm">
             <thead class="thead-dark">
@@ -149,7 +150,7 @@
             </thead>
             <tbody>
                 <!-- v-if="lat > min_lat && lat < max_lat && long > min_long && long < max_long" -->
-                <tr v-for="(crime, key) in search_results" @click="AddressSearch(ParseAddress(crime.block))">
+                <tr v-if="crime.time >= start_time && crime.time <= end_time" v-for="(crime, key) in search_results" @click="AddressSearch(ParseAddress(crime.block))" :class="CrimeType(crime.code)">
                     <td> {{ key.substring(1) }} </td>
                     <td> {{ crime.date }} </td>
                     <td> {{ crime.time }} </td>
