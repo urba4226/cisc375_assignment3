@@ -40,7 +40,6 @@ function Init(crime_api_url)
     app = new Vue({
         el: "#app",
         data: {
-            //api_url: "",
             search_results: [],
             neighborhoods: [],
             incidents: [],
@@ -192,3 +191,29 @@ function AddCrime(address)
 {
     console.log("address: " + address);
 }   //AddCrime
+
+function ParseAddress(address)
+{
+    let split_string= address.split(" ");
+    if (split_string[0].charAt(0) >= 0 && split_string[0].charAt(0) <= 9)
+    {
+        split_string[0] = split_string[0].replace("X", "0");
+    }   //if
+    return split_string.join(" ");
+}   //ParseAddress
+
+function AddressSearch(address)
+{
+    console.log(address);
+    let request = {
+        url: "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street=" + address,
+        dataType: "json",
+        success: LocationData
+    };  //request
+    $.ajax(request);
+}   //AddressSearch
+
+function LocationData(data)
+{
+    console.log(data);
+}   //LocationData
