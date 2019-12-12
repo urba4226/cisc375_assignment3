@@ -206,7 +206,7 @@ function AddressSearch(address)
 {
     console.log(address);
     let request = {
-        url: "https://nominatim.openstreetmap.org/search?format=json&limit=5&state=Minnesota&city=Saint Paul&street=" + address,
+        url: "https://nominatim.openstreetmap.org/search?format=json&limit=1&state=Minnesota&city=Saint Paul&street=" + address,
         dataType: "json",
         success: LocationData
     };  //request
