@@ -47,8 +47,8 @@ function Init(crime_api_url)
             selectedIncidents: [],
             start_date: "",
             end_date: "",
-            start_time: "",
-            end_time: ""
+            start_time: "00:00:00",
+            end_time: "23:59:59"
         }  //data
     }); //Vue
 }   //init
@@ -217,3 +217,19 @@ function LocationData(data)
 {
     console.log(data);
 }   //LocationData
+
+function CrimeType(code)
+{
+    if ((code<300) || (code>=400 && code<500) || (code>=800 && code<1000))
+    {
+        return "table-danger";
+    }   //if
+    else if ((code>=300 && code<400) || (code>=500 && code<800) || (code>=1400 && code<1500))
+    {
+        return "table-warning";
+    }   //else if
+    else
+    {
+        return "";
+    }   //else
+}   //CrimeType
