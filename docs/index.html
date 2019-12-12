@@ -131,7 +131,7 @@
             </thead>
             <tbody>
                 <!-- v-if="lat > min_lat && lat < max_lat && long > min_long && long < max_long" -->
-                <tr v-for="(crime, key) in search_results" @click="AddCrime(crime.block)">
+                <tr v-for="(crime, key) in search_results" @click="AddressSearch(ParseAddress(crime.block))">
                     <td> {{ key.substring(1) }} </td>
                     <td> {{ crime.date }} </td>
                     <td> {{ crime.time }} </td>
