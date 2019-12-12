@@ -39,7 +39,7 @@
     <!-- End: Prompt -->
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="index.html">St. Paul Crime Data</a>
+        <a class="navbar-brand" href="#">St. Paul Crime Data</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -117,12 +117,13 @@
                 <!-- Start Time: -->
                 <label for="start_time">Start Time:</label>
                 <input type="time" id="start_time" name="start_time"
-                       min="00:00:00" max="23:59:59" v-model="start_time"><br>
-
+                        min="00:00:00" max="23:59:59" v-model="start_time"><br>
+                        <span>Selected Start Time: {{start_time}}</span><br>
                 <!-- End Time: -->
                 <label for="end_time">End Time:</label>
                 <input type="time" id="end_time" name="end_time"
-                       min="00:00:00" max="23:59:59" v-model="end_time"><br>
+                        min="00:00:00" max="23:59:59" v-model="end_time"><br>
+                        <span>Selected End Time: {{end_time}}</span><br>
             </div>
         </div><br>
 
