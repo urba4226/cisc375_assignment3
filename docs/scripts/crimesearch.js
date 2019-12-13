@@ -296,7 +296,7 @@ function MoveMap()
     document.getElementById('myInput').value="";
     document.getElementById('myInput').placeholder=app.center_lat + ", " + app.center_long;
     input = input.split(",");
-    map.setView(new L.LatLng(input[0],input[1]), 12);
+    mymap.setView(new L.LatLng(input[0],input[1]), 12);
 }
 
 function MapMoved(event)
