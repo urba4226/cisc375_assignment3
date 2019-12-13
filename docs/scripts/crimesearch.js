@@ -20,35 +20,28 @@ function Prompt() {
     }); //dialog
 }   //Prompt
 
-function moveMap()
-{
-	var input;
-	input = document.getElementById('myInput');
-	document.getElementById('myInput')="";
-	alert(1);
-}
-
 function Init(crime_api_url)
 {
     api = crime_api_url;
     mymap = L.map('mapid').setView([44.95, -93.09], 11);
     var conway = L.marker([44.9509, -93.02], 13).addTo(mymap);
-	var east_side = L.marker([44.972, -93.09], 13).addTo(mymap);
-	var west_side = L.marker([42.926, -93.12], 13).addTo(mymap);
-	var dayton = L.marker([44.954, -93.061], 13).addTo(mymap);
-	var payne = L.marker([44.9765, -93.066], 13).addTo(mymap);
-	var north_end = L.marker([44.9765, -93.105], 13).addTo(mymap);
-	var frogtown = L.marker([44.9604, -93.123], 13).addTo(mymap);
-	var summit_university = L.marker([44.9503, -93.127], 13).addTo(mymap);
-	var west_seventh = L.marker([44.9259, -93.1287], 13).addTo(mymap);
-	var como = L.marker([44.9732, -93.1361], 13).addTo(mymap);
-	var hamline = L.marker([44.9439, -93.1507], 13).addTo(mymap);
-	var st_anthony = L.marker([44.973, -93.197], 13).addTo(mymap);
-	var union_park = L.marker([44.9475, -93.1885], 13).addTo(mymap);
-	var macalaster = L.marker([44.9325, -93.1676], 13).addTo(mymap);
-	var highland = L.marker([44.9113, -93.1773], 13).addTo(mymap);
-	var summit_hill = L.marker([44.9368, -93.138], 13).addTo(mymap);
-	var capitol_river = L.marker([44.9587, -93.1034], 13).addTo(mymap);
+    var east_side = L.marker([44.972, -93.09], 13).addTo(mymap);
+    var west_side = L.marker([42.926, -93.12], 13).addTo(mymap);
+    var dayton = L.marker([44.954, -93.061], 13).addTo(mymap);
+    var payne = L.marker([44.9765, -93.066], 13).addTo(mymap);
+    var north_end = L.marker([44.9765, -93.105], 13).addTo(mymap);
+    var frogtown = L.marker([44.9604, -93.123], 13).addTo(mymap);
+    var summit_university = L.marker([44.9503, -93.127], 13).addTo(mymap);
+    var west_seventh = L.marker([44.9259, -93.1287], 13).addTo(mymap);
+    var como = L.marker([44.9732, -93.1361], 13).addTo(mymap);
+    var hamline = L.marker([44.9439, -93.1507], 13).addTo(mymap);
+    var st_anthony = L.marker([44.973, -93.197], 13).addTo(mymap);
+    var union_park = L.marker([44.9475, -93.1885], 13).addTo(mymap);
+    var macalaster = L.marker([44.9325, -93.1676], 13).addTo(mymap);
+    var highland = L.marker([44.9113, -93.1773], 13).addTo(mymap);
+    var summit_hill = L.marker([44.9368, -93.138], 13).addTo(mymap);
+    var capitol_river = L.marker([44.9587, -93.1034], 13).addTo(mymap);
+
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
@@ -56,18 +49,6 @@ function Init(crime_api_url)
         accessToken: 'pk.eyJ1IjoidHVja2VydTE2Njg3IiwiYSI6ImNrNDFzczRubzA0azkzbHA1dzB6YWRoa3kifQ.K159LksBQPayp26P3E1ppQ'
     }).addTo(mymap);
     mymap.on('moveend', MapMoved);
-
-    //Stuff needed for map:
-    //getNorthWest()
-        //long > getNorthWest().lng
-        //lat < getNorthWest().lat
-    //getSouthEast()
-        //long < getSouthEast().lng
-        //lat > getSouthEast().lat
-    //getCenter()
-        //Returns lat/long of center
-    //mouseup event
-        //Fired when user releases mouse button on map
 
     LoadNeighborhoods(crime_api_url);
     LoadIncidents(crime_api_url);
@@ -85,12 +66,31 @@ function Init(crime_api_url)
             end_date: "",
             start_time: "00:00:00",
             end_time: "23:59:59",
-            center_long: "",
-            center_lat: "",
-            west_long: "",
-            north_lat: "",
-            east_long: "",
-            south_lat: ""
+            center_long: "-93.09",
+            center_lat: "44.95",
+            west_long: "-93.296",
+            north_lat: "45.047",
+            east_long: "-92.884",
+            south_lat: "44.853",
+            neighborhood_coordinates: {
+                "Conway/Battlecreek/Highwood": [44.9509, -93.02],
+                "Greater East Side": [44.972, -93.09],
+                "West Side": [42.926, -93.12],
+                "Dayton's Bluff": [44.954, -93.061],
+                "Payne/Phalen": [44.9765, -93.066],
+                "North End": [44.9765, -93.105],
+                "Thomas/Dale(Frogtown)": [44.9604, -93.123],
+                "Summit/University": [44.9503, -93.127],
+                "West Seventh": [44.9259, -93.1287],
+                "Como": [44.9732, -93.1361],
+                "Hamline/Midway": [44.9439, -93.1507],
+                "St. Anthony": [44.973, -93.197],
+                "Union Park": [44.9475, -93.1885],
+                "Macalester-Groveland": [44.9325, -93.1676],
+                "Highland": [44.9113, -93.1773],
+                "Summit Hill": [44.9368, -93.138],
+                "Capitol River": [44.9587, -93.1034]
+            }   //neighborhood_coordinates
         }  //data
     }); //Vue
 }   //init
@@ -290,4 +290,19 @@ function MapMoved(event)
     app.north_lat = bounds.getNorthWest().lat;
     app.east_long = bounds.getSouthEast().lng;
     app.south_lat = bounds.getSouthEast().lat;
+    console.log("Center: " + mymap.getCenter());
+    console.log("Northwest: " + bounds.getNorthWest());
+    console.log("SouthEast: " + bounds.getSouthEast());
 }   //MapRelease
+
+function CheckBounds(coords)
+{
+    if (coords[1]>app.west_long && coords[1]<app.east_long && coords[0]>app.south_lat && coords[0]<app.north_lat)
+    {
+        return true;
+    }   //if
+    else
+    {
+        return false;
+    }   //else
+}   //CheckBounds
