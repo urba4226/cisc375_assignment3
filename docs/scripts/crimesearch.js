@@ -20,6 +20,14 @@ function Prompt() {
     }); //dialog
 }   //Prompt
 
+function moveMap()
+{
+	var input;
+	input = document.getElementById('myInput');
+	document.getElementById('myInput')="";
+	alert(1);
+}
+
 function Init(crime_api_url)
 {
     api = crime_api_url;
