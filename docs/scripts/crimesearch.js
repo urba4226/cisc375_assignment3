@@ -20,16 +20,7 @@ function Prompt() {
     }); //dialog
 }   //Prompt
 
-function MoveMap()
-{
-    console.log("Search clicked");
-    var input;
-    input = document.getElementById('myInput');
-    document.getElementById('myInput')="";
-    alert(1);
-    input = input.split(",")
-    map.setView(new L.LatLng(input[0],input[1]), 12);
-}
+
 
 function Init(crime_api_url)
 {
@@ -298,6 +289,16 @@ function CrimeType(code)
     }   //else
 }   //CrimeType
 
+function MoveMap()
+{
+    var input;
+    input = document.getElementById('myInput').value;
+    document.getElementById('myInput').value="";
+    document.getElementById('myInput').placeholder=app.center_lat + ", " + app.center_long;
+    input = input.split(",");
+    map.setView(new L.LatLng(input[0],input[1]), 12);
+}
+
 function MapMoved(event)
 {
     //Set variables for center lat and long:
@@ -310,6 +311,10 @@ function MapMoved(event)
     app.north_lat = bounds.getNorthEast().lat;
     app.east_long = bounds.getNorthEast().lng;
     app.south_lat = bounds.getSouthWest().lat;
+
+    //Update Search bar placeholder: 
+    document.getElementById('myInput').placeholder=app.center_lat + ", " + app.center_long;
+
     console.log("Center: " + mymap.getCenter());
     console.log("Northeast: " + bounds.getNorthEast());
     console.log("Southwest: " + bounds.getSouthWest());
