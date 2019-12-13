@@ -9,14 +9,21 @@ var bodyParser = require('body-parser');
 var js2xmlparser = require('js2xmlparser');
 var sqlite3 = require('sqlite3');
 
+if(process.argv.length<3)
+{
+    console.log("Missing port number!");
+    console.log("Format: node server.js <port_num>");
+    process.exit();
+}
+
 var db_filename = path.join(__dirname, 'db', 'stpaul_crime.sqlite3');
 
 var app = express();
-var port = 8000;
+var port = process.argv[2];
 
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(cors());
 
 // open usenergy.sqlite3 database
 var db = new sqlite3.Database(db_filename, sqlite3.OPEN_READWRITE, (err) => {
