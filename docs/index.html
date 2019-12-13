@@ -56,6 +56,7 @@
         </div>
     </nav>
 
+    <label for="myInput">Enter coordinates to search (lat, long): </label><br>
     <input type="text" id="myInput" placeholder="" size="45">
     <button id="mapButton" onclick="MoveMap()">Search</button>
 
@@ -153,7 +154,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-if="(CheckBounds(neighborhood_coordinates[neighborhoods['N' + crime.neighborhood_number]])) && (crime.time >= start_time && crime.time <= end_time)" v-for="(crime, key) in search_results" @click="AddressSearch(ParseAddress(crime.block))" :class="CrimeType(crime.code)">
+                <tr v-if="(CheckBounds(neighborhood_coordinates[neighborhoods['N' + crime.neighborhood_number]])) && (crime.time >= start_time && crime.time <= end_time)" v-for="(crime, key) in search_results" @click="AddCrimeMarker(crime.block, crime.incident)" :class="CrimeType(crime.code)">
                     <td> {{ key.substring(1) }} </td>
                     <td> {{ crime.date }} </td>
                     <td> {{ crime.time }} </td>
