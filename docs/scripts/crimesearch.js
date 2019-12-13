@@ -23,7 +23,7 @@ function Prompt() {
 function Init(crime_api_url)
 {
     api = crime_api_url;
-    mymap = L.map('mapid').setView([44.95, -93.09], 13);
+    mymap = L.map('mapid').setView([44.95, -93.09], 11);
     var conway = L.marker([44.9509, -93.02], 13).addTo(mymap);
 	var east_side = L.marker([44.972, -93.09], 13).addTo(mymap);
 	var west_side = L.marker([42.926, -93.12], 13).addTo(mymap);
