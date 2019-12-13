@@ -60,7 +60,13 @@ function Init(crime_api_url)
             start_date: "",
             end_date: "",
             start_time: "00:00:00",
-            end_time: "23:59:59"
+            end_time: "23:59:59",
+            center_long: "",
+            center_lat: "",
+            west_long: "",
+            north_lat: "",
+            east_long: "",
+            south_lat: ""
         }  //data
     }); //Vue
 }   //init
@@ -250,7 +256,14 @@ function CrimeType(code)
 
 function MapMoved(event)
 {
-    console.log(mymap.getCenter());
-    //console.log("Lat: " + event.latlng.lat);
-    //console.log("Lng: " + event.latlng.lng);
+    //Set variables for center lat and long:
+    app.center_long = mymap.getCenter().lng;
+    app.center_lat = mymap.getCenter().lat;
+
+    //Set variables for Northwest/Southeast lat and long:
+    let bounds = mymap.getBounds();
+    app.west_long = bounds.getNorthWest().lng;
+    app.north_lat = bounds.getNorthWest().lat;
+    app.east_long = bounds.getSouthEast().lng;
+    app.south_lat = bounds.getSouthEast().lat;
 }   //MapRelease
