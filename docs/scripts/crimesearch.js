@@ -20,20 +20,21 @@ function Prompt() {
     }); //dialog
 }   //Prompt
 
-function moveMap()
+function MoveMap()
 {
-	var input;
-	input = document.getElementById('myInput');
-	document.getElementById('myInput')="";
-	alert(1);
-	input = input.split(",")
-	map.setView(new L.LatLng(input[0],input[1]), 12);
+    console.log("Search clicked");
+    var input;
+    input = document.getElementById('myInput');
+    document.getElementById('myInput')="";
+    alert(1);
+    input = input.split(",")
+    map.setView(new L.LatLng(input[0],input[1]), 12);
 }
 
 function Init(crime_api_url)
 {
     api = crime_api_url;
-    mymap = L.map('mapid').setView([44.95, -93.09], 11);
+    mymap = L.map('mapid').setView([44.95, -93.08931335449219], 11);
     var conway = L.marker([44.9509, -93.02], 13).addTo(mymap);
     var east_side = L.marker([44.972, -93.09], 13).addTo(mymap);
     var west_side = L.marker([42.926, -93.12], 13).addTo(mymap);
@@ -51,8 +52,12 @@ function Init(crime_api_url)
     var highland = L.marker([44.9113, -93.1773], 13).addTo(mymap);
     var summit_hill = L.marker([44.9368, -93.138], 13).addTo(mymap);
     var capitol_river = L.marker([44.9587, -93.1034], 13).addTo(mymap);
-    
-    mymap.setMaxBounds(mymap.getBounds());
+
+    mymap.setMaxBounds([
+            //Northeast:
+            [45.0474, -92.8833],
+            //Southwest:
+            [44.854, -93.2953]]);
 
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -232,7 +237,6 @@ function FilteredSearch(neighborhoods, incidents, start_date, end_date)
         dataType: "json",
         success: CrimeData
     };  //request
-    console.log(request.url);
     $.ajax(request);
 }   //CrimeSearch
 
@@ -244,6 +248,9 @@ function CrimeData(data)
 
 function AddCrime(address)
 {
+    let parsed = ParseAddress(address);
+    //marker.bindPopup(popupContent).openPopup();
+    //map.removeLayer(theMarker);
     console.log("address: " + address);
 }   //AddCrime
 
@@ -259,7 +266,7 @@ function ParseAddress(address)
 
 function AddressSearch(address)
 {
-    console.log(address);
+    //console.log(address);
     let request = {
         url: "https://nominatim.openstreetmap.org/search?format=json&limit=1&state=Minnesota&city=Saint Paul&street=" + address,
         dataType: "json",
@@ -270,8 +277,8 @@ function AddressSearch(address)
 
 function LocationData(data)
 {
-    console.log("Lat: " + data[0].lat);
-    console.log("Lon: " + data[0].lon);
+    //console.log("Lat: " + data[0].lat);
+    //console.log("Lon: " + data[0].lon);
     console.log(data);
 }   //LocationData
 
@@ -299,13 +306,13 @@ function MapMoved(event)
 
     //Set variables for Northwest/Southeast lat and long:
     let bounds = mymap.getBounds();
-    app.west_long = bounds.getNorthWest().lng;
-    app.north_lat = bounds.getNorthWest().lat;
-    app.east_long = bounds.getSouthEast().lng;
-    app.south_lat = bounds.getSouthEast().lat;
+    app.west_long = bounds.getSouthWest().lng;
+    app.north_lat = bounds.getNorthEast().lat;
+    app.east_long = bounds.getNorthEast().lng;
+    app.south_lat = bounds.getSouthWest().lat;
     console.log("Center: " + mymap.getCenter());
-    console.log("Northwest: " + bounds.getNorthWest());
-    console.log("SouthEast: " + bounds.getSouthEast());
+    console.log("Northeast: " + bounds.getNorthEast());
+    console.log("Southwest: " + bounds.getSouthWest());
 }   //MapRelease
 
 function CheckBounds(coords)
@@ -319,3 +326,11 @@ function CheckBounds(coords)
         return false;
     }   //else
 }   //CheckBounds
+
+function CenterToString()
+{
+    let output = "";
+    output = output + app.center_lat + "," + app.center_long;
+    console.log(output);
+    return output;
+}   //CenterToString
