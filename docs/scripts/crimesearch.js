@@ -35,7 +35,7 @@ function Init(crime_api_url)
 	var west_seventh = L.marker([44.9259, -93.1287], 13).addTo(mymap);
 	var como = L.marker([44.9732, -93.1361], 13).addTo(mymap);
 	var hamline = L.marker([44.9439, -93.1507], 13).addTo(mymap);
-	var st_anthony = L.marker([45.018, -93..218], 13).addTo(mymap);
+	var st_anthony = L.marker([45.018, -93.218], 13).addTo(mymap);
 	var union_park = L.marker([44.9475, -93.1885], 13).addTo(mymap);
 	var macalaster = L.marker([44.9325, -93.1676], 13).addTo(mymap);
 	var highland = L.marker([44.9113, -93.1773], 13).addTo(mymap);
