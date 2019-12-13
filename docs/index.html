@@ -56,8 +56,6 @@
         </div>
     </nav>
 
-    <input type="text" id="myInput" placeholder="Search for lat long..">
-	<button @click="moveMap()" id="mapButton" >Search</button>
     <div id="mapid" style="width: 600px; height: 400px;"></div>
 
     <div id="app">
@@ -152,8 +150,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- v-if="lat > min_lat && lat < max_lat && long > min_long && long < max_long" -->
-                <tr v-if="crime.time >= start_time && crime.time <= end_time" v-for="(crime, key) in search_results" @click="AddressSearch(ParseAddress(crime.block))" :class="CrimeType(crime.code)">
+                <tr v-if="(CheckBounds(neighborhood_coordinates[neighborhoods['N' + crime.neighborhood_number]])) && (crime.time >= start_time && crime.time <= end_time)" v-for="(crime, key) in search_results" @click="AddressSearch(ParseAddress(crime.block))" :class="CrimeType(crime.code)">
                     <td> {{ key.substring(1) }} </td>
                     <td> {{ crime.date }} </td>
                     <td> {{ crime.time }} </td>
