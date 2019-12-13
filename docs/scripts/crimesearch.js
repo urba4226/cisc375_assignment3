@@ -20,6 +20,16 @@ function Prompt() {
     }); //dialog
 }   //Prompt
 
+function moveMap()
+{
+	var input;
+	input = document.getElementById('myInput');
+	document.getElementById('myInput')="";
+	alert(1);
+	input = input.split(",")
+	map.setView(new L.LatLng(input[0],input[1]), 12);
+}
+
 function Init(crime_api_url)
 {
     api = crime_api_url;
@@ -41,10 +51,13 @@ function Init(crime_api_url)
     var highland = L.marker([44.9113, -93.1773], 13).addTo(mymap);
     var summit_hill = L.marker([44.9368, -93.138], 13).addTo(mymap);
     var capitol_river = L.marker([44.9587, -93.1034], 13).addTo(mymap);
+    
+    mymap.setMaxBounds(mymap.getBounds());
 
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
+        minZoom: 11,
         id: 'mapbox/streets-v11',
         accessToken: 'pk.eyJ1IjoidHVja2VydTE2Njg3IiwiYSI6ImNrNDFzczRubzA0azkzbHA1dzB6YWRoa3kifQ.K159LksBQPayp26P3E1ppQ'
     }).addTo(mymap);
