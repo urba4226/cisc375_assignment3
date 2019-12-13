@@ -24,7 +24,23 @@ function Init(crime_api_url)
 {
     api = crime_api_url;
     mymap = L.map('mapid').setView([44.95, -93.09], 13);
-
+    var conway = L.marker([44.9509, -93.02], 13).addTo(mymap);
+	var east_side = L.marker([44.972, -93.09], 13).addTo(mymap);
+	var west_side = L.marker([42.926, -93.12], 13).addTo(mymap);
+	var dayton = L.marker([44.954, -93.061], 13).addTo(mymap);
+	var payne = L.marker([44.9765, -93.066], 13).addTo(mymap);
+	var north_end = L.marker([44.9765, -93.105], 13).addTo(mymap);
+	var frogtown = L.marker([44.9604, -93.123], 13).addTo(mymap);
+	var summit_university = L.marker([44.9503, -93.127], 13).addTo(mymap);
+	var west_seventh = L.marker([44.9259, -93.1287], 13).addTo(mymap);
+	var como = L.marker([44.9732, -93.1361], 13).addTo(mymap);
+	var hamline = L.marker([44.9439, -93.1507], 13).addTo(mymap);
+	var st_anthony = L.marker([45.018, -93..218], 13).addTo(mymap);
+	var union_park = L.marker([44.9475, -93.1885], 13).addTo(mymap);
+	var macalaster = L.marker([44.9325, -93.1676], 13).addTo(mymap);
+	var highland = L.marker([44.9113, -93.1773], 13).addTo(mymap);
+	var summit_hill = L.marker([44.9368, -93.138], 13).addTo(mymap);
+	var capitol_river = L.marker([44.9587, -93.1034], 13).addTo(mymap);
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
