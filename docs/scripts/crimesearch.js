@@ -237,27 +237,33 @@ function CrimeData(data)
     console.log(data);
 }   //CrimeData
 
-function AddCrimeMarker(address, incident)
+function AddCrimeMarker(address, date, time, incident)
 {
     let parsed = ParseAddress(address);
     let request = {
         url: "https://nominatim.openstreetmap.org/search?format=json&limit=1&state=Minnesota&city=Saint Paul&street=" + parsed,
         dataType: "json",
-        success: (data, incident)=>
+        success: (data)=>
             {
-                var paragraph = document.createElement("p");
-                paragraph.textContent="Date: ";
-                var button = document.createElement("button");
-                var div = document.createElement("div");
-                div.appendChild(paragraph);
-                div.appendChild(button);
-                button.textContent="Remove Marker";
-                var test = L.marker([data[0].lat, data[0].lon], 13).addTo(mymap);
-                test.bindPopup(div).openPopup();
-                //test.bindPopup('<p>Incident: <br></p><button type="button" onclick="mymap.removeLayer(test)">Remove Marker</button>').openPopup();
-                button.onclick=function (){
-                    mymap.removeLayer(test);
-                };
+                if(data.length > 0)
+                {
+                    var paragraph = document.createElement("p");
+                    paragraph.innerHTML="Date: " + date + "<br>Time: " + time + "<br>Incident: " + incident;
+                    var button = document.createElement("button");
+                    var div = document.createElement("div");
+                    div.appendChild(paragraph);
+                    div.appendChild(button);
+                    button.textContent="Remove Marker";
+                    var crimeMarker = L.marker([data[0].lat, data[0].lon], 13).addTo(mymap);
+                    crimeMarker.bindPopup(div).openPopup();
+                    button.onclick=function (){
+                        mymap.removeLayer(crimeMarker);
+                    };
+                }   //if
+                else
+                {
+                    console.log("Error: could not find location");
+                }
             }
     };  //request
     $.ajax(request);
