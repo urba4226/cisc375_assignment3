@@ -461,71 +461,70 @@ function updateMarkers()
     }
 
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[0];
+    paragraph.innerHTML="Conway/Battlecreek/Highwood<br>Total Crimes: " + counts[0];
     conway.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[1];
+    paragraph.innerHTML="Dayton's Bluff<br>Total Crimes: " + counts[1];
     dayton.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[2];
+    paragraph.innerHTML="North End<br>Total Crimes: " + counts[2];
     north_end.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[3];
+    paragraph.innerHTML="Hamline/Midway<br>Total Crimes: " + counts[3];
     hamline.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[4];
+    paragraph.innerHTML="Capitol River<br>Total Crimes: " + counts[4];
     capitol_river.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[5];
+    paragraph.innerHTML="Union Park<br>Total Crimes: " + counts[5];
     union_park.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[6];
+    paragraph.innerHTML="Thomas/Dale(Frogtown)<br>Total Crimes: " + counts[6];
     frogtown.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[7];
+    paragraph.innerHTML="Macalester-Groveland<br>Total Crimes: " + counts[7];
     macalaster.bindPopup(paragraph);
-    
 
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[8];
+    paragraph.innerHTML="Como<br>Total Crimes: " + counts[8];
     como.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[9];
+    paragraph.innerHTML="Highland<br>Total Crimes: " + counts[9];
     highland.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[10];
+    paragraph.innerHTML="Payne/Phalen<br>Total Crimes: " + counts[10];
     payne.bindPopup(paragraph);
 
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[11];
+    paragraph.innerHTML="Summit Hill<br>Total Crimes: " + counts[11];
     summit_hill.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[12];
+    paragraph.innerHTML="West Seventh<br>Total Crimes: " + counts[12];
     west_seventh.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[13];
+    paragraph.innerHTML="St. Anthony<br>Total Crimes: " + counts[13];
     st_anthony.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[14];
+    paragraph.innerHTML="Greater East Side<br>Total Crimes: " + counts[14];
     east_side.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[15];
+    paragraph.innerHTML="West Side<br>Total Crimes: " + counts[15];
     west_side.bindPopup(paragraph);
     
     var paragraph = document.createElement("p");
-    paragraph.innerHTML="Total Crimes: " + counts[16];
+    paragraph.innerHTML="Summit/University<br>Total Crimes: " + counts[16];
     summit_university.bindPopup(paragraph);   
 }   //updateMarkers()
