@@ -36,6 +36,7 @@ function Prompt() {
             }   //cancel
         }   //buttons
     }); //dialog
+	updateMarkers();
 }   //Prompt
 
 
@@ -130,12 +131,14 @@ function LoadNeighborhoods(api_url)
         success: NeighborhoodData
     };  //request
     $.ajax(request);
+	updateMarkers();
 }   //loadNeighborhoods
 
 function NeighborhoodData(data)
 {
     app.neighborhoods = data;
     console.log(data);
+	 updateMarkers()
 }   //NeighborhoodData
 
 function LoadIncidents(api_url)
@@ -146,6 +149,7 @@ function LoadIncidents(api_url)
         success: IncidentData
     };  //request
     $.ajax(request);
+	 updateMarkers()
 }   //loadIncidents
 
 function IncidentData(data)
@@ -162,6 +166,7 @@ function CrimeSearch(api_url)
         success: CrimeData
     };  //request
     $.ajax(request);
+	updateMarkers()
 }   //CrimeSearch
 
 
@@ -253,6 +258,7 @@ function FilteredSearch(neighborhoods, incidents, start_date, end_date)
 function CrimeData(data)
 {
     app.search_results = data;
+	updateMarkers()
     console.log(data);
 }   //CrimeData
 
