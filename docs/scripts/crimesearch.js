@@ -2,6 +2,24 @@ var app;
 var api;
 var mymap;
 
+var conway;
+var east_side;
+var west_side;
+var dayton;
+    var payne;
+    var north_end;
+    var frogtown;
+    var summit_university;
+    var west_seventh;
+    var como;
+    var hamline;
+var st_anthony;
+var union_park;
+var macalaster;
+var highland;
+var summit_hill;
+var capitol_river;
+
 function Prompt() {
     $("#dialog-form").dialog({
         autoOpen: true,
@@ -26,23 +44,23 @@ function Init(crime_api_url)
 {
     api = crime_api_url;
     mymap = L.map('mapid').setView([44.95, -93.08931335449219], 11);
-    var conway = L.marker([44.9509, -93.02], 13).addTo(mymap);
-    var east_side = L.marker([44.972, -93.09], 13).addTo(mymap);
-    var west_side = L.marker([42.926, -93.12], 13).addTo(mymap);
-    var dayton = L.marker([44.954, -93.061], 13).addTo(mymap);
-    var payne = L.marker([44.9765, -93.066], 13).addTo(mymap);
-    var north_end = L.marker([44.9765, -93.105], 13).addTo(mymap);
-    var frogtown = L.marker([44.9604, -93.123], 13).addTo(mymap);
-    var summit_university = L.marker([44.9503, -93.127], 13).addTo(mymap);
-    var west_seventh = L.marker([44.9259, -93.1287], 13).addTo(mymap);
-    var como = L.marker([44.9732, -93.1361], 13).addTo(mymap);
-    var hamline = L.marker([44.9439, -93.1507], 13).addTo(mymap);
-    var st_anthony = L.marker([44.973, -93.197], 13).addTo(mymap);
-    var union_park = L.marker([44.9475, -93.1885], 13).addTo(mymap);
-    var macalaster = L.marker([44.9325, -93.1676], 13).addTo(mymap);
-    var highland = L.marker([44.9113, -93.1773], 13).addTo(mymap);
-    var summit_hill = L.marker([44.9368, -93.138], 13).addTo(mymap);
-    var capitol_river = L.marker([44.9587, -93.1034], 13).addTo(mymap);
+     conway = L.marker([44.9509, -93.02], 13).addTo(mymap);
+     east_side = L.marker([44.972, -93.09], 13).addTo(mymap);
+     west_side = L.marker([42.926, -93.12], 13).addTo(mymap);
+     dayton = L.marker([44.954, -93.061], 13).addTo(mymap);
+     payne = L.marker([44.9765, -93.066], 13).addTo(mymap);
+     north_end = L.marker([44.9765, -93.105], 13).addTo(mymap);
+     frogtown = L.marker([44.9604, -93.123], 13).addTo(mymap);
+     summit_university = L.marker([44.9503, -93.127], 13).addTo(mymap);
+     west_seventh = L.marker([44.9259, -93.1287], 13).addTo(mymap);
+     como = L.marker([44.9732, -93.1361], 13).addTo(mymap);
+     hamline = L.marker([44.9439, -93.1507], 13).addTo(mymap);
+     st_anthony = L.marker([44.973, -93.197], 13).addTo(mymap);
+     union_park = L.marker([44.9475, -93.1885], 13).addTo(mymap);
+     macalaster = L.marker([44.9325, -93.1676], 13).addTo(mymap);
+     highland = L.marker([44.9113, -93.1773], 13).addTo(mymap);
+     summit_hill = L.marker([44.9368, -93.138], 13).addTo(mymap);
+     capitol_river = L.marker([44.9587, -93.1034], 13).addTo(mymap);
 
     mymap.setMaxBounds([
             //Northeast:
@@ -229,6 +247,7 @@ function FilteredSearch(neighborhoods, incidents, start_date, end_date)
         success: CrimeData
     };  //request
     $.ajax(request);
+	updateMarkers();
 }   //CrimeSearch
 
 function CrimeData(data)
@@ -236,6 +255,155 @@ function CrimeData(data)
     app.search_results = data;
     console.log(data);
 }   //CrimeData
+
+function updateMarkers()
+{
+	var counts = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+	console.log("updating markers");
+	var rowLength = document.getElementById('crimeTable').rows.length;
+	for(var i = 0;i<rowLength;i++)
+	{
+		//console.log("!"+document.getElementById('crimeTable').rows[i].cells[3].innerHTML+"!");
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " Conway/Battlecreek/Highwood ")
+		{
+			counts[0] = counts[0] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " Dayton's Bluff ")
+		{
+			counts[1] = counts[1] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " North End ")
+		{
+			counts[2] = counts[2] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " Hamline/Midway ")
+		{
+			counts[3] = counts[3] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " Capitol River ")
+		{
+			counts[4] = counts[4] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " Union Park ")
+		{
+			counts[5] = counts[5] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " Thomas/Dale(Frogtown) ")
+		{
+			counts[6] = counts[6] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " Macalester-Groveland ")
+		{
+			counts[7] = counts[7] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " Como ")
+		{
+			counts[8] = counts[8] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " Highland ")
+		{
+			counts[9] = counts[9] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " Payne/Phalen ")
+		{
+			counts[10] = counts[10] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " Summit Hill ")
+		{
+			counts[11] = counts[11] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " West Seventh ")
+		{
+			counts[12] = counts[12] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " St. Anthony ")
+		{
+			counts[13] = counts[13] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " Greater East Side ")
+		{
+			counts[14] = counts[14] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " West Side ")
+		{
+			counts[15] = counts[15] + 1;
+		}
+		if(document.getElementById('crimeTable').rows[i].cells[3].innerHTML == " Summit/University ")
+		{
+			counts[16] = counts[16] + 1;
+		}
+	}
+
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[0];
+	conway.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[1];
+	dayton.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[2];
+	north_end.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[3];
+	hamline.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[4];
+	capitol_river.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[5];
+	union_park.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[6];
+	frogtown.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[7];
+	macalaster.bindPopup(paragraph);
+	
+
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[8];
+	como.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[9];
+	highland.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[10];
+	payne.bindPopup(paragraph);
+
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[11];
+	summit_hill.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[12];
+	west_seventh.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[13];
+	st_anthony.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[14];
+	east_side.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[15];
+	west_side.bindPopup(paragraph);
+	
+	var paragraph = document.createElement("p");
+	paragraph.innerHTML="Total Crimes: " + counts[16];
+	summit_university.bindPopup(paragraph);	
+	
+}
 
 function AddCrimeMarker(address, date, time, incident)
 {
