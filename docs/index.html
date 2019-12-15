@@ -121,12 +121,12 @@
                 <!-- Start Time: -->
                 <label for="start_time">Start Time:</label>
                 <input type="time" id="start_time" name="start_time"
-                        min="00:00:00" max="23:59:59" v-model="start_time" @change=""><br>
+                        min="00:00:00" max="23:59:59" v-model="start_time" @change="updateMarkers()"><br>
                         <span>Selected Start Time: {{start_time}}</span><br>
                 <!-- End Time: -->
                 <label for="end_time">End Time:</label>
                 <input type="time" id="end_time" name="end_time"
-                        min="00:00:00" max="23:59:59" v-model="end_time" @change=""><br>
+                        min="00:00:00" max="23:59:59" v-model="end_time" @change="updateMarkers()"><br>
                         <span>Selected End Time: {{end_time}}</span><br>
             </div>
         </div><br>
@@ -144,7 +144,7 @@
         <table class="table table-hover table-sm" id = "crimeTable">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col"> Case Number </th>
+                    <th scope="col"> Case Number </th>0
                     <th scope="col"> Date </th>
                     <th scope="col"> Time </th>
                     <th scope="col" class = "neighborhood"> Neighborhood Name </th>
@@ -165,6 +165,9 @@
                 </tr>
             </tbody>
         </table>
+		<script>
+		 updateMarkers();
+		</script>
     </div>
 </body>
 </html>
