@@ -34,7 +34,7 @@
      <!-- Prompt -->
     <div id="dialog-form">
         <label for="name">URL for St. Paul Crime API:</label>
-        <input type="text" id="prompt_input" class="text ui-widget-content ui-corner-all" style="width: 320px;" v-model="api_url" value="http://localhost:8000"/>
+        <input type="text" id="prompt_input" class="text ui-widget-content ui-corner-all" style="width: 320px;" v-model="api_url"/>
     </div>
     <!-- End: Prompt -->
 
@@ -56,7 +56,7 @@
         </div>
     </nav>
 
-    <label for="myInput">Enter coordinates to search (lat, long): </label><br>
+    <label for="myInput">Enter Address/Coordinates to search (lat, long): </label><br>
     <input type="text" id="myInput" placeholder="" size="45">
     <button id="mapButton" onclick="MoveMap()">Search</button>
 
@@ -122,12 +122,10 @@
                 <label for="start_time">Start Time:</label>
                 <input type="time" id="start_time" name="start_time"
                         min="00:00:00" max="23:59:59" v-model="start_time" @change="updateMarkers()"><br>
-                        <span>Selected Start Time: {{start_time}}</span><br>
                 <!-- End Time: -->
                 <label for="end_time">End Time:</label>
                 <input type="time" id="end_time" name="end_time"
                         min="00:00:00" max="23:59:59" v-model="end_time" @change="updateMarkers()"><br>
-                        <span>Selected End Time: {{end_time}}</span><br>
             </div>
         </div><br>
 
