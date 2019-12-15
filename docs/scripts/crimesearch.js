@@ -282,7 +282,7 @@ function AddCrimeMarker(address, date, time, incident)
                 }   //if
                 else
                 {
-                    console.log("Error: could not find location");
+                    alert("Nominatim could not find crime location");
                 }
             }
     };  //request
@@ -336,7 +336,37 @@ function MoveMap()
     document.getElementById('myInput').value="";
     document.getElementById('myInput').placeholder=app.center_lat + ", " + app.center_long;
     input = input.split(",");
-    mymap.setView(new L.LatLng(input[0],input[1]), 12);
+    try
+    {
+        mymap.setView(new L.LatLng(input[0],input[1]), 14);
+    }   //try
+    catch(error)
+    {
+        try
+        {
+            let request = {
+                url: "https://nominatim.openstreetmap.org/search?format=json&limit=1&state=Minnesota&street=" + input,
+                dataType: "json",
+                success: (data)=>
+                {
+                    if(data.length > 0)
+                    {
+                        console.log(data);
+                        mymap.setView(new L.LatLng(data[0].lat,data[0].lon), 14);
+                    }   //if
+                    else
+                    {
+                        alert("Could not find address");
+                    }   //else
+                }   //success
+            }   //request
+            $.ajax(request);
+        }   //try
+        catch(error)
+        {
+            alert("Invalid address format");
+        }
+    }   //catch
 }
 
 function MapMoved(event)
@@ -354,10 +384,6 @@ function MapMoved(event)
 
     //Update Search bar placeholder: 
     document.getElementById('myInput').placeholder=app.center_lat + ", " + app.center_long;
-
-    console.log("Center: " + mymap.getCenter());
-    console.log("Northeast: " + bounds.getNorthEast());
-    console.log("Southwest: " + bounds.getSouthWest());
 }   //MapRelease
 
 function CheckBounds(coords)
@@ -376,14 +402,12 @@ function CenterToString()
 {
     let output = "";
     output = output + app.center_lat + "," + app.center_long;
-    console.log(output);
     return output;
 }   //CenterToString
 
 function updateMarkers()
 {
     var counts = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    console.log("updating markers");
 
     for(crime in app.search_results)
     {
